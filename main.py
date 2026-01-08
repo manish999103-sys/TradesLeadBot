@@ -2,7 +2,7 @@ import os
 import json
 from telegram import Update
 from telegram.ext import ApplicationBuilder, CommandHandler, ContextTypes
-
+from telegram.ext import MessageHandler, filters
 BOT_TOKEN = os.environ.get("BOT_TOKEN")
 
 async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
@@ -30,7 +30,7 @@ async def access(update: Update, context: ContextTypes.DEFAULT_TYPE):
     with open("users.json", "r") as f:
         users = json.load(f)
 
-    users[user_id] = True
+    users[user_id] = ""
     codes[code] = user_id
 
     with open("users.json", "w") as f:
@@ -43,4 +43,45 @@ async def access(update: Update, context: ContextTypes.DEFAULT_TYPE):
 app = ApplicationBuilder().token(BOT_TOKEN).build()
 app.add_handler(CommandHandler("start", start))
 app.add_handler(CommandHandler("access", access))
+app.add_handler(CommandHandler("setmsg", setmsg))
+app.add_handler(MessageHandler(filters.TEXT & ~filters.COMMAND, auto_reply))
+async def auto_reply(update: Update, context: ContextTypes.DEFAULT_TYPE):
+    user_id = str(update.effective_user.id)
+
+    with open("users.json", "r") as f:
+        users = json.load(f)
+
+    if user_id not in users:
+        return  # no access, no reply
+
+    message = users[user_id]
+    if message == "":
+        return
+
+    await update.message.reply_text(message)
+
+
+async def setmsg(update: Update, context: ContextTypes.DEFAULT_TYPE):
+    user_id = str(update.effective_user.id)
+
+    # users.json load
+    with open("users.json", "r") as f:
+        users = json.load(f)
+
+    if user_id not in users:
+        await update.message.reply_text("❌ Access denied. Buy access first.")
+        return
+
+    if len(context.args) == 0:
+        await update.message.reply_text("❌ Use: /setmsg Your auto message")
+        return
+
+    message = " ".join(context.args)
+
+    users[user_id] = message
+
+    with open("users.json", "w") as f:
+        json.dump(users, f)
+
+    await update.message.reply_text("✅ Auto message saved!")
 app.run_polling(drop_pending_updates=True)
