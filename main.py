@@ -10,8 +10,8 @@ from typing import List, Dict
 
 # Configuration
 CONFIG = {
-    "telegram_token": 7985859688:AAGyK2hKgZxdGYNfo2VVPn0AZqDvoDDRR78",
-    "telegram_chat_id": 6030865385,
+    "telegram_token": "7985859688:AAGyK2hKgZxdGYNfo2VVPn0AZqDvoDDRR78",
+    "telegram_chat_id": "6030865385",
     "check_interval": 60,  # How often to check (in seconds)
     "headless": False,     # Show the browser
     "database_path": "leads.db",
