@@ -52,10 +52,11 @@ async def auto_reply(update: Update, context: ContextTypes.DEFAULT_TYPE):
         users = json.load(f)
 
     if user_id not in users:
-        return  # no access, no reply
+        return
 
     message = users[user_id]
-    if message == "":
+
+    if not message:
         return
 
     await update.message.reply_text(message)
