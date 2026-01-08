@@ -31,7 +31,7 @@ async def access(update: Update, context: ContextTypes.DEFAULT_TYPE):
         users = json.load(f)
 
     users[user_id] = ""
-    codes[code] = user_id
+codes[code] = user_id
 
     with open("users.json", "w") as f:
         json.dump(users, f)
@@ -46,6 +46,8 @@ app.add_handler(CommandHandler("access", access))
 app.add_handler(CommandHandler("setmsg", setmsg))
 app.add_handler(MessageHandler(filters.TEXT & ~filters.COMMAND, auto_reply))
 async def auto_reply(update: Update, context: ContextTypes.DEFAULT_TYPE):
+    if update.message.text.startswith("/"):
+    return
     user_id = str(update.effective_user.id)
 
     with open("users.json", "r") as f:
