@@ -30,8 +30,8 @@ async def access(update: Update, context: ContextTypes.DEFAULT_TYPE):
     with open("users.json", "r") as f:
         users = json.load(f)
 
-    users[user_id] = ""
-codes[code] = user_id
+    users[user_id] = ""        # ✅ EMPTY MESSAGE INIT
+    codes[code] = user_id
 
     with open("users.json", "w") as f:
         json.dump(users, f)
