@@ -47,7 +47,7 @@ app.add_handler(CommandHandler("setmsg", setmsg))
 app.add_handler(MessageHandler(filters.TEXT & ~filters.COMMAND, auto_reply))
 async def auto_reply(update: Update, context: ContextTypes.DEFAULT_TYPE):
     if update.message.text.startswith("/"):
-    return
+        return
     user_id = str(update.effective_user.id)
 
     with open("users.json", "r") as f:
