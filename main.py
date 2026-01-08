@@ -60,11 +60,9 @@ async def auto_reply(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
     await update.message.reply_text(message)
 
-
 async def setmsg(update: Update, context: ContextTypes.DEFAULT_TYPE):
     user_id = str(update.effective_user.id)
 
-    # users.json load
     with open("users.json", "r") as f:
         users = json.load(f)
 
@@ -78,7 +76,7 @@ async def setmsg(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
     message = " ".join(context.args)
 
-    users[user_id] = message
+    users[user_id] = message   # ✅ YAHI MAIN LINE HAI
 
     with open("users.json", "w") as f:
         json.dump(users, f)
